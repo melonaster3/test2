@@ -7,22 +7,72 @@
   <!-- Queue-it JavaScript SDK -->
   <script type='text/javascript' src='https://static.queue-it.net/script/queueclient.min.js'></script>
   <script
-     data-queueit-c='saletest'
-     type='text/javascript'
-     src='https://static.queue-it.net/script/queueconfigloader.min.js'>
+    data-queueit-c='saletest'
+    type='text/javascript'
+    src='https://static.queue-it.net/script/queueconfigloader.min.js'>
   </script>
 
+  <style>
+    /* Modal styles */
+    #popup {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    #popup-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 300px;
+      text-align: center;
+      border-radius: 10px;
+    }
+
+    #close-popup {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
 
   <h1>2025년 1학기 수강 신청</h1>
+  <button onclick="showPopup();">open/close</button>
+  <!-- Hidden popup -->
+  <div id="popup">
+    <div id="popup-content">
+      <p>팝업 내용입니다. 여기에 원하는 메시지를 넣으세요.</p>
+      <button id="close-popup">닫기</button>
+    </div>
+  </div>
 
+  <script>
+    const courseCode = "CS101";
 
+    // Show popup function
+    function showPopup() {
+      document.getElementById('popup').style.display = 'block';
+    }
 
+    // Close popup event
+    document.getElementById('close-popup').addEventListener('click', function () {
+      document.getElementById('popup').style.display = 'none';
+    });
 
-    <script>
-  const courseCode = "CS101";
-
+    // You can trigger this when needed
+    // Example: showPopup();
   </script>
 </body>
 </html>
