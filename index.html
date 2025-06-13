@@ -12,6 +12,45 @@
      type='text/javascript'
      src='https://static.queue-it.net/script/queueconfigloader.min.js'>
   </script>
+  
+  <script>
+    function verifyAccount () {
+        waitingRoomFinished2 = true;
+        QueueIt.validateUser();
+    }
+     function areQueueItParamsPresent() {
+  const requiredParams = [
+    'qitq',
+    'qitp',
+    'qitts',
+    'qitc',
+    'qite',
+    'qitrt',
+    'qith'
+  ];
+  const urlParams = new URLSearchParams(window.location.search);
+  // Check every required param exists and has a non-empty value
+  return requiredParams.every(param => urlParams.has(param) && urlParams.get(param) !== '');
+}
+
+if(areQueueItParamsPresent ()) {
+verifyAccount();
+}
+    function submitForm() {
+      const form = document.getElementById('phone-form');
+      const formData = new FormData(form);
+
+      // Convert FormData to query string
+      const params = new URLSearchParams();
+      for (const [key, value] of formData.entries()) {
+        params.append(key, value);
+      }
+
+      // Redirect to example.com with query parameters appended
+      const url = 'https://example.com?' + params.toString();
+      window.location.href = url;
+    }
+  </script>
   <style>
     body {
       font-family: sans-serif;
@@ -72,49 +111,6 @@
     <button type="button" onclick="verifyAccount()">제출하기</button>
   </form>
 
-  <script>
-
-    function verifyAccount () {
-        waitingRoomFinished2 = true;
-        QueueIt.validateUser();
-    }
-
-     function areQueueItParamsPresent() {
-  const requiredParams = [
-    'qitq',
-    'qitp',
-    'qitts',
-    'qitc',
-    'qite',
-    'qitrt',
-    'qith'
-  ];
-
-  const urlParams = new URLSearchParams(window.location.search);
-
-  // Check every required param exists and has a non-empty value
-  return requiredParams.every(param => urlParams.has(param) && urlParams.get(param) !== '');
-}
-
-if(areQueueItParamsPresent ()) {
-verifyAccount();
-}
-
-    function submitForm() {
-      const form = document.getElementById('phone-form');
-      const formData = new FormData(form);
-
-      // Convert FormData to query string
-      const params = new URLSearchParams();
-      for (const [key, value] of formData.entries()) {
-        params.append(key, value);
-      }
-
-      // Redirect to example.com with query parameters appended
-      const url = 'https://example.com?' + params.toString();
-      window.location.href = url;
-    }
-  </script>
 
 </body>
 </html>
