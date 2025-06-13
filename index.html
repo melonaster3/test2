@@ -3,54 +3,91 @@
 <head>
   <meta charset="UTF-8" />
   <title>휴대폰 사양 입력</title>
+
+  <!-- Queue-it Script -->
   <script>
     var waitingRoomFinished2 = false;
   </script>
-    <script type='text/javascript' src='https://static.queue-it.net/script/queueclient.min.js'></script>
+  <script type="text/javascript" src="https://static.queue-it.net/script/queueclient.min.js"></script>
   <script
-     data-queueit-c='saletest'
-     type='text/javascript'
-     src='https://static.queue-it.net/script/queueconfigloader.min.js'>
+    data-queueit-c="saletest"
+    type="text/javascript"
+    src="https://static.queue-it.net/script/queueconfigloader.min.js">
   </script>
-  
-  <script>
-    function verifyAccount () {
-        waitingRoomFinished2 = true;
-        QueueIt.validateUser();
-    }
-     function areQueueItParamsPresent() {
-  const requiredParams = [
-    'qitq',
-    'qitp',
-    'qitts',
-    'qitc',
-    'qite',
-    'qitrt',
-    'qith'
-  ];
-  const urlParams = new URLSearchParams(window.location.search);
-  // Check every required param exists and has a non-empty value
-  return requiredParams.every(param => urlParams.has(param) && urlParams.get(param) !== '');
-}
 
-if(areQueueItParamsPresent ()) {
-verifyAccount();
-}
+  <!-- Core Logic -->
+  <script>
+    function areQueueItParamsPresent() {
+      const requiredParams = [
+        'qitq',
+        'qitp',
+        'qitts',
+        'qitc',
+        'qite',
+        'qitrt',
+        'qith'
+      ];
+      const urlParams = new URLSearchParams(window.location.search);
+      return requiredParams.every(param => urlParams.has(param) && urlParams.get(param) !== '');
+    }
+
+    function verifyAccount() {
+      // Save form data to localStorage
+      const form = document.getElementById('phone-form');
+      const formData = new FormData(form);
+      const formObject = {};
+      for (const [key, value] of formData.entries()) {
+        formObject[key] = value;
+      }
+      localStorage.setItem('phoneFormData', JSON.stringify(formObject));
+
+      // Trigger Queue-it validation
+      waitingRoomFinished2 = true;
+      QueueIt.validateUser();
+    }
+
+    function restoreAndSubmitForm() {
+      const storedData = localStorage.getItem('phoneFormData');
+      if (!storedData) return;
+
+      const formObject = JSON.parse(storedData);
+      const form = document.getElementById('phone-form');
+
+      for (const key in formObject) {
+        const input = form.elements[key];
+        if (input) {
+          input.value = formObject[key];
+        }
+      }
+
+      // Clear stored data
+      localStorage.removeItem('phoneFormData');
+
+      // Auto-submit form
+      submitForm();
+    }
+
     function submitForm() {
       const form = document.getElementById('phone-form');
       const formData = new FormData(form);
 
-      // Convert FormData to query string
       const params = new URLSearchParams();
       for (const [key, value] of formData.entries()) {
         params.append(key, value);
       }
 
-      // Redirect to example.com with query parameters appended
       const url = 'https://example.com?' + params.toString();
       window.location.href = url;
     }
+
+    // On page load, if coming from Queue-it, restore and auto-submit
+    window.addEventListener('DOMContentLoaded', () => {
+      if (areQueueItParamsPresent()) {
+        restoreAndSubmitForm();
+      }
+    });
   </script>
+
   <style>
     body {
       font-family: sans-serif;
@@ -110,7 +147,6 @@ verifyAccount();
 
     <button type="button" onclick="verifyAccount()">제출하기</button>
   </form>
-
 
 </body>
 </html>
