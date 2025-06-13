@@ -1,28 +1,120 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>2025년 1학기 수강 신청</title>
-
-  <!-- Queue-it JavaScript SDK -->
-  <script type='text/javascript' src='https://static.queue-it.net/script/queueclient.min.js'></script>
-  <script
-    data-queueit-c='saletest'
-    type='text/javascript'
-    src='https://static.queue-it.net/script/queueconfigloader.min.js'>
+  <meta charset="UTF-8" />
+  <title>휴대폰 사양 입력</title>
+  <script>
+    var waitingRoomFinished2 = false;
   </script>
-
-
+    <script type='text/javascript' src='https://static.queue-it.net/script/queueclient.min.js'></script>
+  <script
+     data-queueit-c='saletest'
+     type='text/javascript'
+     src='https://static.queue-it.net/script/queueconfigloader.min.js'>
+  </script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 40px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input, select {
+      padding: 5px;
+      margin-top: 4px;
+      margin-bottom: 15px;
+      width: 200px;
+    }
+  </style>
 </head>
 <body>
 
-  <h1>2025년 1학기 수강 신청</h1>
- 
+  <h1>휴대폰 사양 입력</h1>
+
+  <form id="phone-form">
+    <label>
+      브랜드:
+      <select name="brand" required>
+        <option value="">선택하세요</option>
+        <option value="Galaxy">갤럭시</option>
+        <option value="A">A 시리즈</option>
+        <option value="Note">노트 시리즈</option>
+        <option value="Flip">플립 시리즈</option>
+      </select>
+    </label>
+
+    <label>
+      모델명:
+      <input type="text" name="model" required placeholder="모델명을 입력하세요" />
+    </label>
+
+    <label>
+      색상:
+      <input type="text" name="color" placeholder="예: 블랙, 화이트" />
+    </label>
+
+    <label>
+      저장 용량:
+      <select name="storage" required>
+        <option value="">선택하세요</option>
+        <option value="64GB">64GB</option>
+        <option value="128GB">128GB</option>
+        <option value="256GB">256GB</option>
+        <option value="512GB">512GB</option>
+      </select>
+    </label>
+
+    <button type="button" onclick="submitForm()">제출하기</button>
+  </form>
 
   <script>
-    const courseCode = "CS101";
 
-  
+    function verifyAccount () {
+        waitingRoomFinished2 = true;
+        QueueIt.validateUser();
+    }
+
+     function areQueueItParamsPresent() {
+  const requiredParams = [
+    'qitq',
+    'qitp',
+    'qitts',
+    'qitc',
+    'qite',
+    'qitrt',
+    'qith'
+  ];
+
+  const urlParams = new URLSearchParams(window.location.search);
+
+  // Check every required param exists and has a non-empty value
+  return requiredParams.every(param => urlParams.has(param) && urlParams.get(param) !== '');
+}
+
+if(areQueueItParamsPresent ()) {
+submitForm();
+}
+
+    function submitForm() {
+      const form = document.getElementById('phone-form');
+      const formData = new FormData(form);
+
+      // Convert FormData to query string
+      const params = new URLSearchParams();
+      for (const [key, value] of formData.entries()) {
+        params.append(key, value);
+      }
+
+      // Redirect to example.com with query parameters appended
+      const url = 'https://example.com?' + params.toString();
+      window.location.href = url;
+    }
   </script>
+
 </body>
 </html>
