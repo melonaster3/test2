@@ -13,6 +13,33 @@
       type="text/javascript"
       src="//static.queue-it.net/script/queueconfigloader.min.js"
     ></script>
+    <script>
+      function areQueueItParamsPresent() {
+        const requiredParams = [
+          "qitq",
+          "qitp",
+          "qitts",
+          "qitc",
+          "qite",
+          "qitrt",
+          "qith",
+        ];
+        const urlParams = new URLSearchParams(window.location.search);
+        if (
+          requiredParams.every(
+            (param) => urlParams.has(param) && urlParams.get(param) !== ""
+          )
+        ) {
+          waitingRoomName = urlParams.get("qite");
+          if (waitingRoomName === "waitingroompopup") {
+            window.parent.postMessage("closeModal", "*");
+          }
+          return true;
+        }
+        return false;
+      }
+      areQueueItParamsPresent();
+    </script>
     <meta charset="UTF-8" />
     <title>갤럭시 S25 엣지 액세서리</title>
     <style>
@@ -273,30 +300,6 @@
         }
       }
 
-      function areQueueItParamsPresent() {
-        const requiredParams = [
-          "qitq",
-          "qitp",
-          "qitts",
-          "qitc",
-          "qite",
-          "qitrt",
-          "qith",
-        ];
-        const urlParams = new URLSearchParams(window.location.search);
-        if (
-          requiredParams.every(
-            (param) => urlParams.has(param) && urlParams.get(param) !== ""
-          )
-        ) {
-          waitingRoomName = urlParams.get("qite");
-          if (waitingRoomName === "waitingroompopup") {
-            window.parent.postMessage("closeModal", "*");
-          }
-          return true;
-        }
-        return false;
-      }
       function closeSuccessModal() {
         const modal = document.getElementById("waiting-room-modal");
         if (modal) {
