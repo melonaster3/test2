@@ -32,6 +32,8 @@
         ) {
           waitingRoomName = urlParams.get("qite");
           if (waitingRoomName === "waitingroompopup") {
+            popup = true;
+            QueueIt.validateUser();
             window.parent.postMessage("closeModal", "*");
           }
           return true;
