@@ -25,15 +25,19 @@
           "qith",
         ];
         const urlParams = new URLSearchParams(window.location.search);
-        if (
-          requiredParams.every(
-            (param) => urlParams.has(param) && urlParams.get(param) !== ""
-          )
-        ) {
+        const hasQueueItCookie = document.cookie
+          .split("; ")
+          .some((cookie) => cookie.startsWith("QueueITAccepted"));
+        const hasAllParams = requiredParams.every(
+          (param) => urlParams.has(param) && urlParams.get(param) !== ""
+        );
+
+        if (hasAllParams || hasQueueItCookie) {
           waitingRoomName = urlParams.get("qite");
           if (waitingRoomName === "waitingroompopup") {
             popup = true;
             QueueIt.validateUser();
+            window.parent.postMessage("closeModal", "*");
           }
           return true;
         }
