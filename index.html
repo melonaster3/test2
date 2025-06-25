@@ -261,8 +261,55 @@
         const modal = document.getElementById("waiting-room-modal");
         if (modal) {
           modal.remove(); // Completely removes it from the DOM
+          // Create the new success modal
+          const successModal = document.createElement("div");
+          successModal.id = "waiting-room-modal";
+          successModal.innerHTML = `
+    <div class="modal-backdrop"></div>
+    <div class="modal-content" style="justify-content: center; align-items: center; text-align: center; font-size: 20px;">
+      <div style="padding: 20px;">🎉 Good job, you did it! 🎉</div>
+      <button class="modal-close" onclick="closeSuccessModal()">닫기</button>
+    </div>
+  `;
+          document.body.appendChild(successModal);
         }
       }
+
+      function areQueueItParamsPresent() {
+        const requiredParams = [
+          "qitq",
+          "qitp",
+          "qitts",
+          "qitc",
+          "qite",
+          "qitrt",
+          "qith",
+        ];
+        const urlParams = new URLSearchParams(window.location.search);
+        if (
+          requiredParams.every(
+            (param) => urlParams.has(param) && urlParams.get(param) !== ""
+          )
+        ) {
+          waitingRoomName = urlParams.get("qite");
+          if (waitingRoomName === "waitingroompopup") {
+            window.parent.postMessage("closeModal", "*");
+          }
+          return true;
+        }
+        return false;
+      }
+      function closeSuccessModal() {
+        const modal = document.getElementById("waiting-room-modal");
+        if (modal) {
+          modal.remove();
+        }
+      }
+      window.addEventListener("message", function (event) {
+        if (event.data === "closeModal") {
+          closeWaitingRoom(); // Your custom logic
+        }
+      });
     </script>
   </body>
 </html>
