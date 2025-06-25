@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
+    <script>
+      var popup;
+    </script>
     <script
       type="text/javascript"
       src="//static.queue-it.net/script/queueclient.min.js"
@@ -123,6 +126,51 @@
         text-decoration: underline;
         cursor: pointer;
       }
+
+      #waiting-room-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+      }
+
+      .modal-backdrop {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+
+      .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 800px;
+        height: 80%;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modal-content iframe {
+        flex: 1;
+        border: none;
+      }
+
+      .modal-close {
+        background: black;
+        color: white;
+        border: none;
+        padding: 10px;
+        font-size: 14px;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -149,7 +197,9 @@
           />
           <div class="title">갤럭시 A16 엣지 클리어 마그넷 케이스</div>
           <div class="price"><del>25,300원</del> <strong>17,700원</strong></div>
-          <button class="buy-button">함께 구매하기</button>
+          <button class="buy-button" onclick="callWaitingRoom()">
+            함께 구매하기
+          </button>
           <div class="details-button">자세히 보기</div>
         </div>
 
@@ -190,5 +240,29 @@
         </div>
       </div>
     </div>
+    <script>
+      function callWaitingRoom() {
+        // Create the modal container
+        const modal = document.createElement("div");
+        modal.id = "waiting-room-modal";
+        modal.innerHTML = `
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <iframe src="https://saletest.queue-it.net/?c=saletest&e=waitingroompopup"></iframe>
+        <button class="modal-close" onclick="closeWaitingRoom()">닫기</button>
+      </div>
+    `;
+        document.body.appendChild(modal);
+        popup = true;
+        QueueIt.validateUser();
+      }
+
+      function closeWaitingRoom() {
+        const modal = document.getElementById("waiting-room-modal");
+        if (modal) {
+          modal.remove(); // Completely removes it from the DOM
+        }
+      }
+    </script>
   </body>
 </html>
